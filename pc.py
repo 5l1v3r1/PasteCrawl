@@ -11,6 +11,11 @@ def banner():
  *********************** **************************
 ''')
 
+def write_pb(log, pb_id):
+	r = requests.get("https://pastebin.com/raw/" + pb_id)
+	f = open("loot/" + pb_id + "_" + log,"w")
+	f.write(r.text)
+	f.close()
 def pb_get(pb_id):
 	r = requests.get("https://pastebin.com/raw/" + pb_id)
 	return r.text
@@ -38,6 +43,7 @@ else:
 				x = pb_get(i.get('href')[1:])
 				if re.search(sys.argv[1], x) and i.get('href')[1:] not in file_log:
 					print("[+] Found : http://pastebin.com/raw/" + i.get('href')[1:])
+					write_pb(sys.argv[2], i.get('href')[1:])
 					fh = open(sys.argv[2],"a")
 					fh.write(i.get('href')[1:] + "\n")
 					fh.close()
